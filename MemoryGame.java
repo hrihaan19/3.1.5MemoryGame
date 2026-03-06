@@ -19,16 +19,20 @@ public class MemoryGame
     int rounds = 0;
     boolean keepPlaying = true;
 
-    // --- PARTNER SWITCH: [Name] as Driver, [Name] as Navigator ---
 
+    // role switch
+    // Hrihaan: Driver (person writing the code)
+    // Avi: Navigator (suggesting edits and guiding)
+
+    // main game loop runs until the player decides to stop
     while (keepPlaying) {
         rounds++;
         
-        // Create a random version of the memory strings using a shuffle algorithm
+        // copy the memory strings into a new array that will be shuffled
         String[] randomSeq = new String[memoryStrings.length];
         System.arraycopy(memoryStrings, 0, randomSeq, 0, memoryStrings.length);
         
-        // Random Permutation Algorithm (Swapping elements)
+        // shuffle the sequence using a random swapping algorithm
         for (int i = 0; i < randomSeq.length; i++) {
             int randIndex = (int)(Math.random() * randomSeq.length);
             String temp = randomSeq[i];
@@ -36,24 +40,28 @@ public class MemoryGame
             randomSeq[randIndex] = temp;
         }
 
-        // Play sequence with .5 second delay and capture guess
-        // Test Note: You can change .5 to other values to test speed requirements
+        // play the sequence on screen with a 0.5 second delay
+        // the player's input guess is captured 
         String guess = game.playSequence(randomSeq, .5);
 
-        // --- PARTNER SWITCH: [Name] as Driver, [Name] as Navigator ---
 
-        // Determine a match if the guess is not null (handles "Cancel" test case)
+        // role switch #2
+        // Avi: Driver 
+        // Hrihaan: Navigator
+
+        // check that the guess is not null (handles the Cancel button case)
         if (guess != null) {
-            // Cleanse data: replace commas and spaces with empty string
+
+            // clean the user's input by removing spaces and commas
             String cleanGuess = guess.replace(" ", "").replace(",", "");
             
-            // Build a string from the array to compare against the cleansed guess
+            // convert the correct sequence array into a string for comparison
             String actualSeq = "";
             for (String s : randomSeq) {
                 actualSeq += s;
             }
 
-            // Iterate to determine if elements match
+            // compare the user's guess to the actual sequence
             if (cleanGuess.equalsIgnoreCase(actualSeq)) {
                 game.matched();
                 score++;
@@ -61,12 +69,17 @@ public class MemoryGame
                 game.tryAgain();
             }
         }
-            
-        // Ask to play again and track rounds
+
+
+        // role switch #3
+        // Hrihaan: Driver
+        // Avi: Navigator
+
+        // ask the player if they want to keep playing
         keepPlaying = game.playAgain();
     }
    
-    // Final score summary
+    // print the final score and number of rounds played
     game.showScore(score, rounds);
   }
 }
